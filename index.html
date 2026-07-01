@@ -20,7 +20,7 @@
   .tab.active{background:var(--panel2);color:var(--ink);border-color:var(--accent)}
   .view{display:none}
   .view.active{display:block}
-  .layout{display:grid;grid-template-columns:1fr 340px;gap:22px;align-items:start}
+  .layout{display:grid;grid-template-columns:1fr 360px;gap:22px;align-items:start}
   @media(max-width:900px){.layout{grid-template-columns:1fr}}
   .gridcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
   .axis-note{font-size:13px;color:var(--muted);margin:0 0 14px}
@@ -43,13 +43,23 @@
   .detail{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:18px;min-height:220px}
   .detail h3{margin:0 0 10px;font-size:16px}
   .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#fff}
-  .kv{margin:10px 0;font-size:13px}
+  .kv{margin:9px 0;font-size:13px}
   .kv .k{color:var(--muted);display:block;font-size:11px;text-transform:uppercase;letter-spacing:.4px}
   .kv .v{color:var(--ink)}
-  .ex{margin-top:12px;padding:12px;background:var(--panel);border-radius:9px;font-size:13.5px;line-height:1.55;border-left:3px solid var(--accent)}
-  .ex .lbl{font-size:11px;text-transform:uppercase;color:var(--muted);letter-spacing:.4px;display:block;margin-bottom:4px}
+  .exlist{margin-top:12px}
+  .exlist .lbl{font-size:11px;text-transform:uppercase;color:var(--muted);letter-spacing:.4px;display:block;margin-bottom:6px}
+  .exitem{background:var(--panel);border-radius:9px;margin-bottom:6px;border-left:3px solid var(--accent);overflow:hidden}
+  .extitle{padding:9px 12px;font-size:13.5px;font-weight:600;cursor:pointer;display:flex;gap:8px;align-items:flex-start}
+  .extitle .arw{color:var(--accent);transition:transform .12s;flex:none;margin-top:1px}
+  .exitem.open .extitle .arw{transform:rotate(90deg)}
+  .exdetail{display:none;padding:0 12px 11px 30px;font-size:13px;line-height:1.55;color:var(--muted)}
+  .exitem.open .exdetail{display:block}
   .action{margin-top:12px;font-size:13px;color:var(--muted)}
   .action b{color:var(--ink)}
+  .floor{color:#ffe08a;font-weight:700}
+  .btn{background:var(--accent);color:#08122a;border:none;border-radius:9px;padding:9px 14px;font-weight:700;font-size:13px;cursor:pointer;margin-top:14px}
+  .btn.sec{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+  .btn:hover{filter:brightness(1.08)}
   .legend{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:16px;font-size:12.5px}
   .legend h4{margin:0 0 10px;font-size:13px}
   .lg{display:flex;align-items:center;gap:9px;margin:6px 0}
@@ -57,65 +67,69 @@
   .named{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;font-size:13px}
   .named h4{margin:0 0 8px;font-size:13px}
   .named .pill{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:2px 8px;font-size:11px;color:var(--accent);cursor:pointer;margin:2px 4px 2px 0}
-  .floor{color:#ffd; font-weight:700}
   .concept{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-bottom:20px;font-size:13.5px;line-height:1.6}
   .concept b{color:var(--accent)}
   .foot{color:var(--muted);font-size:12px;margin-top:26px;line-height:1.6}
+  .logwrap{display:grid;grid-template-columns:340px 1fr;gap:22px;align-items:start}
+  @media(max-width:900px){.logwrap{grid-template-columns:1fr}}
+  .form{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .form h3{margin:0 0 14px;font-size:16px}
+  .form label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin:12px 0 4px}
+  .form select,.form input,.form textarea{width:100%;background:var(--panel);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:8px 10px;font-size:13.5px;font-family:inherit}
+  .form textarea{resize:vertical;min-height:52px}
+  .preview{margin-top:14px;padding:10px 12px;background:var(--panel);border-radius:9px;font-size:13px}
+  .tablecard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;overflow-x:auto}
+  .tablecard .bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+  .tablecard h3{margin:0;font-size:16px}
+  table.log{border-spacing:0;width:100%;font-size:12.5px}
+  table.log th{text-align:left;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.3px;padding:7px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+  table.log td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.log tr:hover td{background:var(--panel2)}
+  .zbadge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;color:#fff}
+  .del{color:#e88;cursor:pointer;font-weight:700}
+  .empty{color:var(--muted);font-size:13px;padding:18px 4px}
+  .count{color:var(--muted);font-size:12px}
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>Clinical Quality Grids</h1>
-  <p class="sub">A two-axis culpability model for diagnostic and treatment decisions. Click any cell for its score, zone, and worked example.</p>
-
+  <p class="sub">A two-axis culpability model for diagnostic and treatment decisions. Click any cell for its score, zone, and worked examples.</p>
   <div class="concept" id="conceptBox"></div>
-
   <div class="tabs">
     <div class="tab active" data-view="dx" onclick="switchView('dx')">🩺 Diagnosis Grid</div>
     <div class="tab" data-view="tx" onclick="switchView('tx')">💊 Treatment Grid</div>
   </div>
-
-  <!-- DIAGNOSIS -->
   <div class="view active" id="view-dx">
     <div class="layout">
-      <div>
-        <div class="gridcard">
-          <p class="axis-note"><b>Rows — Severity</b> (harm if the diagnosis is missed/delayed) &nbsp;·&nbsp; <b>Columns — Difficulty</b> (how hard the diagnosis is to make). Difficulty is <b>protective</b>: <i>score = severity × ease</i>, where ease = 6 − difficulty. Missing an <b>obvious, lethal</b> diagnosis is the worst quality failure.</p>
-          <div id="grid-dx"></div>
-          <div class="xtitle">Difficulty of Diagnosis →</div>
-        </div>
-      </div>
+      <div><div class="gridcard">
+        <p class="axis-note"><b>Rows — Severity</b> (harm if the diagnosis is missed/delayed) &nbsp;·&nbsp; <b>Columns — Difficulty</b> (how hard the diagnosis is to make). Difficulty is <b>protective</b>: <i>score = severity × ease</i>, ease = 6 − difficulty. Missing an <b>obvious, lethal</b> diagnosis is the worst quality failure.</p>
+        <div id="grid-dx"></div>
+        <div class="xtitle">Difficulty of Diagnosis →</div>
+      </div></div>
       <div class="side">
-        <div class="detail" id="detail-dx"><h3>Select a cell</h3><p class="sub">Click a cell in the grid to see its scoring and a clinical example.</p></div>
+        <div class="detail" id="detail-dx"><h3>Select a cell</h3><p class="sub">Click a cell to see its scoring and worked examples.</p></div>
         <div class="named" id="named-dx"></div>
       </div>
     </div>
   </div>
-
-  <!-- TREATMENT -->
   <div class="view" id="view-tx">
     <div class="layout">
-      <div>
-        <div class="gridcard">
-          <p class="axis-note"><b>Rows — Severity</b> (harm caused by the treatment error) &nbsp;·&nbsp; <b>Columns — Deviation</b> (how far the chosen therapy is from correct). Deviation is <b>aggravating</b>: <i>score = severity × deviation</i>. A <b>contraindicated</b> drug causing <b>fatal</b> harm is the worst failure.</p>
-          <div id="grid-tx"></div>
-          <div class="xtitle">Deviation from Correct Treatment →</div>
-        </div>
-      </div>
+      <div><div class="gridcard">
+        <p class="axis-note"><b>Rows — Potential harm</b> (worst plausible harm the error could cause — from drug toxicity <i>or</i> under-treatment) &nbsp;·&nbsp; <b>Columns — Deviation</b> (how far the therapy departs from correct — <b>every column is a real error</b>). <i>Score = potential harm × deviation.</i> Optimal care isn't on the grid. Even the leftmost column is a real (if trivial) departure from the single preferred option — which is why a life-threatening illness with only a <b>negligible</b> deviation still scores 5 (Minor), not zero. Worst failure = a <b>contraindicated</b> choice with <b>fatal</b> potential.</p>
+        <div id="grid-tx"></div>
+        <div class="xtitle">Deviation from Correct Treatment →</div>
+      </div></div>
       <div class="side">
-        <div class="detail" id="detail-tx"><h3>Select a cell</h3><p class="sub">Click a cell in the grid to see its scoring and a clinical example.</p></div>
+        <div class="detail" id="detail-tx"><h3>Select a cell</h3><p class="sub">Click a cell to see its scoring and worked examples.</p></div>
         <div class="named" id="named-tx"></div>
       </div>
     </div>
   </div>
-
   <div class="legend" id="legend"></div>
-
   <p class="foot" id="foot"></p>
 </div>
-
 <script>
-/* ---------- shared scales ---------- */
 const SEV = [
   {n:5,label:"Catastrophic",desc:"Death or equivalent if missed/wrong (MERP I · CTCAE 5)"},
   {n:4,label:"Severe",desc:"Permanent harm — organ/limb loss, disability (MERP G–H · CTCAE 4)"},
@@ -131,14 +145,12 @@ const DIFF = [
   {n:5,label:"Occult",desc:"Genuinely hidden; most competent clinicians would miss it"}
 ];
 const DEV = [
-  {n:1,label:"Optimal",desc:"Within accepted practice — effectively no error"},
+  {n:1,label:"Negligible",desc:"A real but inconsequential departure from the single preferred option — still within guideline-concordant, accepted practice, so no reasonable reviewer would expect a different outcome"},
   {n:2,label:"Wrong magnitude",desc:"Right drug & direction, but under/over-dosed or not titrated"},
   {n:3,label:"Inferior selection",desc:"Right goal, clearly inferior agent/class; ignores a comorbidity-tailored better choice"},
   {n:4,label:"Ineffective",desc:"Does not address the diagnosis — no benefit"},
   {n:5,label:"Contraindicated",desc:"Actively harmful / contraindicated — worsens the patient"}
 ];
-
-/* ---------- zones ---------- */
 function zone(s){
   if(s<=4)  return {k:"z-accept",  name:"Acceptable", action:"Expected practice variation. No action beyond routine documentation."};
   if(s<=8)  return {k:"z-minor",   name:"Minor",      action:"Educational feedback / individual learning point."};
@@ -146,152 +158,236 @@ function zone(s){
   if(s<=19) return {k:"z-serious", name:"Serious",    action:"Peer review + corrective action; present at M&M."};
   return             {k:"z-sentinel",name:"Sentinel",   action:"Mandatory root-cause analysis; system-level response."};
 }
-
-/* ---------- diagnosis examples [severity 5..1][difficulty 1..5] ---------- */
+const zColor={ "z-accept":"#1f7a4d","z-minor":"#8a7c1f","z-review":"#b5731f","z-serious":"#c23b3b","z-sentinel":"#7a1f6b" };
+function scoreOf(kind,s,x){ return kind==="dx" ? s*(6-x) : s*x; }
 const DX = {
- 5:[ "Classic ACS: crushing substernal pain, diaphoresis, radiation in a high-risk CAD patient — sent home without ECG/referral. The archetypal preventable death.",
-     "STEMI evident on an ECG already obtained for chest pain — findings not read or not acted on.",
-     "PE: pleuritic pain + tachycardia + recent immobilization — discoverable via Wells score, D-dimer/CTA if considered.",
-     "Aortic dissection presenting as atypical chest/back pain with a near-normal exam; or PE lacking classic risk factors.",
-     "Silent MI presenting only as fatigue/nausea in an elderly diabetic; or sentinel SAH as an atypical headache that resolved." ],
- 4:[ "Testicular torsion: acute severe testicular pain in an adolescent; or cauda equina with saddle anesthesia + retention + bilateral leg weakness.",
-     "Acute stroke with unambiguous focal deficits (FAST-positive) within the treatment window.",
-     "Septic arthritis: hot, swollen joint + fever needing arthrocentesis — easily mis-attributed to gout.",
-     "Compartment syndrome with early pain-out-of-proportion; or early cauda equina with only vague symptoms.",
-     "Spinal epidural abscess: insidious back pain, no fever early, normal neuro exam — notoriously missed." ],
- 3:[ "Classic appendicitis: RLQ pain, McBurney tenderness, rebound, anorexia, low-grade fever.",
-     "DVT: unilateral leg swelling + pain + a risk factor — Wells score then ultrasound.",
-     "Atypical (retrocecal) appendicitis; or pyelonephritis vs simple cystitis requiring deliberate assessment.",
-     "DVT masked by chronic baseline edema; or a smoldering diverticular abscess.",
-     "Occult moderate GI bleed presenting only as fatigue; early evolving process mimicking simple cellulitis." ],
- 2:[ "Simple UTI: dysuria, frequency, positive urine dip.",
-     "Strep pharyngitis: Centor criteria + positive rapid antigen test.",
-     "Hypothyroidism behind nonspecific fatigue/weight gain — needs a TSH.",
-     "Subclinical hypothyroidism or mild iron-deficiency anemia with only vague symptoms.",
-     "Early celiac / other indolent condition with subtle, easily-overlooked features." ],
- 1:[ "Viral URI — obvious and self-limiting.",
-     "Viral gastroenteritis with classic history.",
-     "Contact dermatitis vs another benign rash.",
-     "Atypical but benign rash or a mild functional complaint.",
-     "Obscure yet entirely benign, self-limiting finding." ]
+ 5:[
+  [{t:"Classic ACS not sent to ED",d:"Crushing chest pain, diaphoresis and arm radiation in a high-risk patient walks into urgent care — discharged with no ECG and no 911/ED transfer. The archetypal preventable cardiac death."},
+   {t:"Ruptured ectopic missed",d:"Woman of childbearing age with severe lower-abdominal pain, near-syncope and a positive pregnancy test — sent home instead of emergently referred."},
+   {t:"Meningococcal sepsis not escalated",d:"Ill-appearing febrile patient with a spreading non-blanching rash and confusion — treated as a viral illness rather than an emergency transfer."}],
+  [{t:"STEMI on the clinic ECG",d:"Chest pain prompts an in-office ECG showing clear ST elevation, but the tracing is misread or not acted on."},
+   {t:"Abnormal vitals ignored",d:"Clearly abnormal vitals (hypotension, hypoxia, marked tachycardia) in an unwell patient are not acted on before discharge."},
+   {t:"Meningitis syndrome not referred",d:"Fever, severe headache, photophobia and neck stiffness — an evident syndrome that isn't urgently sent to the ED."}],
+  [{t:"PE with risk factors",d:"Pleuritic pain and tachycardia after a long flight, recent surgery or estrogen use — caught via a Wells score and D-dimer or ED referral when actively considered."},
+   {t:"Thunderclap headache (SAH)",d:"Sudden worst-ever headache; needs immediate ED/CT, but requires deliberate suspicion to refer."},
+   {t:"New DKA behind vague symptoms",d:"Polyuria, weight loss and malaise in a new or known diabetic — a fingerstick glucose and ketones reveal it when checked."}],
+  [{t:"Aortic dissection, benign exam",d:"Atypical chest/back pain with a near-normal exam and no classic risk factors — easily labeled musculoskeletal."},
+   {t:"Atypical MI in a woman/elder",d:"Fatigue, nausea and jaw or epigastric discomfort without classic chest pain — a known under-diagnosed pattern."},
+   {t:"PE without risk factors",d:"Isolated mild dyspnea in a patient with no obvious provocation and an unremarkable look."}],
+  [{t:"Silent MI in elderly diabetic",d:"Presents only as fatigue or not-feeling-right, with blunted or absent chest pain — missed by most careful clinicians."},
+   {t:"Sentinel-bleed SAH",d:"A minor warning headache days earlier that resolved, with a normal exam — genuinely hard to catch in clinic."},
+   {t:"Early necrotizing fasciitis",d:"Pain out of proportion with unremarkable early skin findings, before overt signs appear."}]
+ ],
+ 4:[
+  [{t:"Testicular torsion, classic",d:"Adolescent with acute severe unilateral pain, high-riding testis and absent cremasteric reflex — needs emergent urology referral; delay costs the testis."},
+   {t:"Cauda equina, full red flags",d:"Saddle anesthesia, urinary retention and bilateral leg weakness — a same-day emergent MRI/ED referral, not a routine back-pain follow-up."},
+   {t:"Central retinal artery occlusion",d:"Sudden painless monocular vision loss — a stroke-equivalent needing immediate ED/ophthalmology referral."}],
+  [{t:"Acute stroke, FAST-positive",d:"Unambiguous facial droop, arm drift and slurred speech within the window — 911 not called and the patient is told to follow up."},
+   {t:"Acute angle-closure glaucoma",d:"Painful red eye, fixed mid-dilated pupil, haloes and nausea — sight-threatening if not urgently referred to ophthalmology."},
+   {t:"Limb-threatening injury/infection",d:"Obvious deformity with a cool, pulseless limb, or a rapidly spreading hand infection — a clear indication for emergent referral."}],
+  [{t:"Septic arthritis vs gout",d:"Hot, swollen, painful joint with fever — needs referral for arthrocentesis; mis-calling it a gout flare risks joint destruction."},
+   {t:"Necrotizing otitis externa",d:"Persistent ear pain in a diabetic outlasting routine drops — needs imaging and a skull-base osteomyelitis workup, not another course of topicals."},
+   {t:"Herpes zoster ophthalmicus",d:"Vesicular rash on the nose/forehead with eye involvement — sight-threatening if not treated and referred promptly."}],
+  [{t:"Compartment syndrome, early",d:"Pain out of proportion and pain on passive stretch (post-injury or after a cast) before pulselessness — subtle early and easily under-called."},
+   {t:"Evolving cauda equina",d:"Only vague urinary hesitancy or patchy numbness before full red flags develop — hard to catch at a single visit."},
+   {t:"Cervical myelopathy",d:"Insidious gait/hand clumsiness attributed to aging until cord signs advance."}],
+  [{t:"Giant cell arteritis",d:"New temporal headache, scalp tenderness or jaw claudication in an older adult — a missed diagnosis leads to permanent vision loss; needs urgent steroids and referral."},
+   {t:"Spinal epidural abscess",d:"Insidious back pain, no early fever and a normal neuro exam — often several clinic visits before it's caught."},
+   {t:"Occult scaphoid fracture",d:"Normal initial X-ray with snuffbox tenderness; avascular necrosis if not splinted and re-imaged."}]
+ ],
+ 3:[
+  [{t:"Classic appendicitis",d:"Peri-umbilical pain migrating to the RLQ with McBurney tenderness, rebound, anorexia and low-grade fever."},
+   {t:"Lobar pneumonia",d:"Fever, productive cough, focal crackles and a clear consolidation on chest film."},
+   {t:"Cellulitis",d:"Well-demarcated warm, tender erythema — a straightforward clinical diagnosis."}],
+  [{t:"DVT with a provoker",d:"Unilateral calf swelling and tenderness after a long flight/immobilization — Wells score then ultrasound."},
+   {t:"Pyelonephritis",d:"Flank pain, fever and pyuria — recognized from history, exam and urinalysis."},
+   {t:"Small-bowel obstruction",d:"Colicky pain, distension, vomiting and a suggestive film in a post-surgical patient."}],
+  [{t:"Retrocecal appendicitis",d:"Atypical location gives flank pain and a softer abdomen — needs deliberate imaging."},
+   {t:"Cystitis vs pyelonephritis",d:"Separating upper- from lower-tract infection when systemic signs are borderline."},
+   {t:"Early cholecystitis",d:"RUQ discomfort with an equivocal Murphy sign — ultrasound clarifies when pursued."}],
+  [{t:"DVT on chronic edema",d:"New clot masked by baseline bilateral swelling, blunting the usual asymmetry cue."},
+   {t:"Smoldering diverticular abscess",d:"Low-grade fever and vague LLQ ache without peritonism — imaging needed to find it."},
+   {t:"Subacute thyroiditis",d:"Neck pain and malaise mimicking pharyngitis until thyroid function and ESR are checked."}],
+  [{t:"Occult GI bleed as fatigue",d:"Iron-deficiency anemia from slow bleeding presenting only as tiredness, with no overt melena."},
+   {t:"Indolent infection",d:"Chronic low-grade presentation (e.g., atypical mycobacterial) mimicking benign processes for weeks."},
+   {t:"Early endocarditis",d:"Nonspecific fatigue and low-grade fever before classic stigmata or a murmur emerge."}]
+ ],
+ 2:[
+  [{t:"Simple UTI",d:"Dysuria and frequency with a positive urine dipstick in an otherwise well patient."},
+   {t:"Strep pharyngitis",d:"Fever, tonsillar exudate, tender nodes and a positive rapid antigen test (Centor)."},
+   {t:"Allergic conjunctivitis",d:"Bilateral itchy, watery eyes with a clear seasonal pattern."}],
+  [{t:"Iron-deficiency anemia",d:"Fatigue with low MCV and ferritin on routine labs."},
+   {t:"Mild hypothyroidism",d:"Fatigue and cold intolerance with a clearly elevated TSH."},
+   {t:"Uncomplicated GERD",d:"Postprandial burning relieved by acid suppression."}],
+  [{t:"Subtle hypothyroidism",d:"Vague fatigue and weight gain where the diagnosis hinges on remembering to check a TSH."},
+   {t:"B12 deficiency",d:"Fatigue and mild paresthesias needing targeted labs to uncover."},
+   {t:"Sleep apnea",d:"Daytime somnolence and snoring that require deliberate screening."}],
+  [{t:"Subclinical hypothyroidism",d:"Minimal symptoms with borderline labs — easy to overlook."},
+   {t:"Early iron deficiency",d:"Low-normal ferritin before frank anemia, requiring a low testing threshold."},
+   {t:"Mild adrenal insufficiency",d:"Nonspecific fatigue and salt craving needing specific provocation testing."}],
+  [{t:"Early celiac disease",d:"Subtle bloating or fatigue without classic GI symptoms — often years to diagnosis."},
+   {t:"Occult medication reaction",d:"Intermittent mild symptoms with no obvious trigger on first pass."},
+   {t:"Indolent micronutrient deficiency",d:"Slowly evolving, nonspecific complaints that resist easy attribution."}]
+ ],
+ 1:[
+  [{t:"Viral URI",d:"Runny nose, sore throat and cough with normal vitals — obviously self-limiting."},
+   {t:"Viral gastroenteritis",d:"Short-lived nausea, vomiting and diarrhea with a classic history."},
+   {t:"Minor contusion",d:"Localized bruising after minor trauma with a benign exam."}],
+  [{t:"Tension headache",d:"Band-like head pain without red flags, responsive to simple analgesia."},
+   {t:"Muscle strain",d:"Activity-related soreness with a benign musculoskeletal exam."},
+   {t:"Aphthous ulcer",d:"Small painful oral ulcer that resolves on its own."}],
+  [{t:"Nonspecific viral rash",d:"Transient exanthem distinguished from other benign rashes by observation."},
+   {t:"Seborrheic dermatitis",d:"Flaky scalp/face rash recognized once considered."},
+   {t:"BPPV",d:"Brief positional vertigo confirmed with a Dix-Hallpike maneuver."}],
+  [{t:"Atypical benign rash",d:"Unusual-looking but harmless eruption needing reassurance, not workup."},
+   {t:"Mild functional complaint",d:"Vague symptoms with a normal exam and no red flags."},
+   {t:"Costochondritis",d:"Reproducible chest-wall tenderness once serious causes are excluded."}],
+  [{t:"Obscure benign finding",d:"An incidental, self-limiting finding that is hard to label but carries no risk."},
+   {t:"Transient idiopathic symptom",d:"Brief, unexplained symptom that resolves without sequelae."},
+   {t:"Normal variant",d:"A benign anatomic/physiologic variant that only needs recognition."}]
+ ]
 };
-
-/* ---------- treatment examples [severity 5..1][deviation 1..5] ---------- */
 const TX = {
- 5:[ "STEMI managed on the correct reperfusion pathway (PCI/lytics) at proper dose — optimal.",
-     "Subtherapeutic heparin dosing in ACS/massive PE — right drug, dangerously low magnitude.",
-     "Oral antibiotics chosen where IV broad-spectrum coverage is required in septic shock.",
-     "Antibiotic with no coverage of the causative organism in sepsis; anaphylaxis treated with antihistamine alone (no epinephrine).",
-     "Non-selective beta-blocker in cocaine-associated ACS (unopposed alpha); AV-nodal blocker in WPW with AF — contraindicated, may precipitate arrest." ],
- 4:[ "Guideline-dose anticoagulation for high-risk AF — optimal.",
-     "Chronically subtherapeutic anticoagulation in high CHA₂DS₂-VASc AF → embolic stroke over time.",
-     "Aspirin alone where full anticoagulation is indicated for stroke prevention in AF.",
-     "Topical/ineffective therapy for a condition needing systemic treatment, allowing permanent damage.",
-     "NSAID in advanced CKD → irreversible renal decline; stacking nephrotoxins." ],
- 3:[ "Reasonable first-line agent at a proper dose for the condition — optimal.",
-     "★ Losartan 50 mg for a patient confirmed in the SBP 160s — right direction, insufficient magnitude; sustained elevation accrues cardiovascular/renal risk. A smaller miss.",
-     "Antihypertensive that ignores diabetic nephropathy (no ACEi/ARB despite albuminuria).",
-     "Wrong-spectrum antibiotic requiring re-treatment / admission; ineffective analgesic regimen for significant pain.",
-     "★ Systemic steroid for a diabetic's presumed arthritic hip pain — worsens glycemic control, risks hyperglycemic crisis. A big miss." ],
- 2:[ "Well-matched minor therapy at the right dose — optimal.",
-     "Chronic medication left mildly under-dosed but corrected at the next visit — right direction, small magnitude gap.",
-     "A slightly inferior agent choice that is easily corrected at the next visit.",
-     "Ineffective symptomatic treatment causing only delayed relief.",
-     "Mildly inappropriate drug causing a minor, reversible side effect." ],
- 1:[ "Trivial treatment matched correctly — optimal.",
-     "Negligible dose imprecision with no consequence.",
-     "Marginally non-preferred choice, no material difference.",
-     "Ineffective but harmless remedy (e.g., for a self-limiting complaint).",
-     "Inappropriate but inconsequential choice with no real risk." ]
+ 5:[
+  [{t:"Equivalent DOAC for high-risk PE/VTE",d:"A patient with a submassive PE is anticoagulated with apixaban when the clinic's pathway names rivaroxaban first-line. Both are guideline-endorsed with equivalent efficacy and bleeding profiles — a documentable departure from the local default, but no reasonable reviewer would expect a different outcome. THIS is what 'negligible in a catastrophic illness' means: the stakes are lethal, yet the choice sits squarely within accepted practice."},
+   {t:"Interchangeable antibiotic for a serious infection",d:"For an infection requiring a third-generation cephalosporin, ceftriaxone is chosen where the protocol lists cefotaxime — clinically interchangeable agents. The substitution is a real deviation from the named default but carries no added risk, so it scores Minor despite the high-stakes setting."},
+   {t:"Acceptable timing or formulation nuance",d:"The correct life-saving therapy is delivered, just on a slightly non-preferred but still-appropriate schedule or formulation (once-daily vs a split dose of the same agent; a first antibiotic dose given 30 minutes later but well within the effective window). The deviation is procedural, not clinical — the patient is not worse off."}],
+  [{t:"Subtherapeutic anticoagulation",d:"The right anticoagulant is prescribed for high-risk AF or VTE, but at a reduced or renally-miscalculated dose that leaves the patient under-protected against a stroke or recurrent clot. The direction is correct; the magnitude is dangerous."},
+   {t:"Under-dosed controller in severe asthma",d:"A patient with severe or brittle asthma is kept on a low-dose ICS/LABA that is clearly insufficient for their control, leaving them exposed to a life-threatening exacerbation until the dose is escalated."},
+   {t:"Half-measure secondary prevention",d:"A post-ACS patient is left on a low- or moderate-intensity statin when high-intensity therapy is indicated — right drug class, insufficient intensity for the level of risk."}],
+  [{t:"Aspirin instead of anticoagulation",d:"A high-CHA₂DS₂-VASc AF patient is given aspirin alone for stroke prevention when full anticoagulation is indicated — the right goal, but clearly inferior protection against a catastrophic stroke."},
+   {t:"Oral route where escalation is needed",d:"A septic-appearing patient is prescribed oral antibiotics to take at home when the severity warrants referral for IV therapy — right intent, inadequate route for the stakes."},
+   {t:"Weaker agent for a lethal-potential infection",d:"An antibiotic covering only part of the likely pathogens is chosen for a serious infection when a broader or better-targeted agent is standard — sometimes effective, but a poor gamble given the downside."}],
+  [{t:"Wrong-spectrum antibiotic",d:"An antibiotic that does not cover the causative organism is prescribed for pneumonia or pyelonephritis, so a dangerous infection keeps progressing while the patient believes they are treated."},
+   {t:"Symptomatic-only for a red flag",d:"A suspected DVT is managed with NSAIDs for 'muscle pain,' or cardiac-sounding chest pain is treated as reflux — the chosen therapy does nothing for the actual life-threat."},
+   {t:"Treating the benign mimic",d:"A patient is given a remedy aimed at a harmless look-alike (an anti-inflammatory for 'costochondritis' that is really unstable angina), leaving the real, dangerous process entirely untouched."}],
+  [{t:"Opioid + benzodiazepine/sedative",d:"An opioid is co-prescribed with a benzodiazepine or other CNS depressant in an at-risk patient — additive respiratory depression that can be fatal, and an explicit boxed-warning combination."},
+   {t:"Nitrate with a PDE5 inhibitor",d:"Nitrates are prescribed to a patient on sildenafil/tadalafil (or the PDE5 inhibitor added to a patient on nitrates) — a well-known interaction causing profound hypotension and collapse."},
+   {t:"Sulfonylurea/insulin overdose in a frail elder",d:"An excessive dose or an inappropriately potent hypoglycemic agent is chosen for a frail elderly diabetic, causing severe, prolonged hypoglycemia — an actively harmful choice for that patient."}]
+ ],
+ 4:[
+  [{t:"Reasonable alternative agent",d:"A condition with permanent-harm potential treated with a defensible equivalent — a negligible deviation."},
+   {t:"Formulary substitution",d:"Therapeutically equivalent swap with no material difference in protection."}],
+  [{t:"Under-treated chronic anticoagulation",d:"Chronically low INR or under-dosed DOAC in high-risk AF, allowing an embolic stroke over time."},
+   {t:"Inadequate glaucoma therapy",d:"Under-treating intraocular pressure so the patient loses visual field progressively."}],
+  [{t:"Under-treated inflammatory disease",d:"A weak or delayed agent (with no rheumatology referral) that lets an inflammatory arthritis cause permanent joint damage."},
+   {t:"Inferior agent for a vision threat",d:"A non-preferred choice for a condition like GCA where prompt high-dose steroids are needed to save sight."}],
+  [{t:"Topical-only for a systemic problem",d:"A condition needing systemic therapy managed with ineffective topical treatment, permitting permanent damage."},
+   {t:"OTC drops for an ocular emergency",d:"Treating a red-flag eye complaint with symptomatic drops instead of the therapy/referral it needs, so injury proceeds."}],
+  [{t:"NSAID in advanced CKD",d:"Prescribing an NSAID to a patient with advanced kidney disease — precipitating irreversible renal decline."},
+   {t:"'Triple whammy' combination",d:"NSAID + ACEi/ARB + diuretic together in a vulnerable patient — a well-known cause of acute-on-chronic kidney injury."},
+   {t:"Nephrotoxin stacking",d:"Layering nephrotoxic or ototoxic agents that together cause permanent injury."}]
+ ],
+ 3:[
+  [{t:"Reasonable equivalent, proper dose",d:"Preferred first-line agent swapped for a defensible equivalent — a minor departure only."},
+   {t:"Acceptable generic substitution",d:"Bioequivalent switch with no clinical consequence."}],
+  [{t:"★ Losartan 50 for SBP 160s",d:"Right drug and direction but insufficient magnitude — a patient confirmed in the 160s is unlikely to reach goal on 50 mg. Sustained elevation accrues cardiovascular and renal risk. Fixed by uptitration; a smaller miss."},
+   {t:"Under-dosed insulin, high A1c",d:"Titration too conservative leaves glucose above target, allowing slow microvascular harm."},
+   {t:"Sub-dosed asthma controller",d:"Controller under-dosed so exacerbations recur avoidably."}],
+  [{t:"HTN choice ignoring nephropathy",d:"A reasonable but non-preferred agent when an ACEi/ARB is indicated for diabetic albuminuria — misses the comorbidity-tailored option."},
+   {t:"Non-preferred antibiotic class",d:"Effective but suboptimal choice that raises resistance/side-effect risk."}],
+  [{t:"Wrong-spectrum antibiotic",d:"Fails to cover the pathogen, requiring re-treatment or admission after no response."},
+   {t:"Ineffective analgesic regimen",d:"Under-treats significant pain with an agent inappropriate for the pain type."}],
+  [{t:"★ Steroid in a diabetic (hip pain)",d:"Systemic steroid for presumed arthritic hip pain in a diabetic worsens glycemic control and risks a hyperglycemic crisis — while also anchoring on an unconfirmed diagnosis. A big miss."},
+   {t:"NSAID in HF/CKD borderline",d:"Fluid retention and renal stress that avoidably destabilize the patient."},
+   {t:"Fluoroquinolone against patient profile",d:"An agent whose QT/tendon/aortic risks are contraindicated by the patient's history."}]
+ ],
+ 2:[
+  [{t:"Trivial dose/agent difference",d:"Well-matched therapy with a negligible variation and no clinical consequence."},
+   {t:"Brand/generic swap",d:"No meaningful difference in effect."}],
+  [{t:"Mildly under-dosed chronic med",d:"Slightly low dose corrected at the next visit — right direction, small magnitude gap."},
+   {t:"Short antibiotic course",d:"Slightly abbreviated but likely adequate course for a minor infection."}],
+  [{t:"Slightly inferior agent",d:"A non-preferred but reasonable choice, easily corrected without harm."},
+   {t:"Non-ideal formulation",d:"A less convenient option that mildly affects adherence."}],
+  [{t:"Ineffective symptomatic Rx",d:"A remedy that simply doesn't help, causing only delayed relief."},
+   {t:"Under-powered topical",d:"Too weak to work, requiring a return visit."}],
+  [{t:"Minor-harm inappropriate drug",d:"A poorly chosen agent that causes a minor, reversible side effect."},
+   {t:"Interaction with mild effect",d:"A drug interaction producing transient, self-limited symptoms."}]
+ ],
+ 1:[
+  [{t:"Trivial, matched choice",d:"Self-limiting condition treated with a marginally non-preferred but harmless option."},
+   {t:"Negligible variation",d:"No material difference from ideal."}],
+  [{t:"Inconsequential dose imprecision",d:"A small dosing deviation with no effect on a benign course."},
+   {t:"Slightly off schedule",d:"Minor timing variance without consequence."}],
+  [{t:"Marginally non-preferred choice",d:"A minor selection quibble with no clinical impact."},
+   {t:"Cosmetic formulation change",d:"Different formulation, same effect."}],
+  [{t:"Harmless ineffective remedy",d:"An ineffective but safe option for a self-limiting complaint."},
+   {t:"Placebo-level intervention",d:"No benefit, no harm, minimal stakes."}],
+  [{t:"Inconsequential poor choice",d:"An inappropriate but risk-free selection given the trivial condition."},
+   {t:"Benign mismatch",d:"Wrong on paper, immaterial in practice."}]
+ ]
 };
-
-/* ---------- builders ---------- */
 function buildGrid(kind){
   const isDx = kind==="dx";
   const XS = isDx?DIFF:DEV;
-  const data = isDx?DX:TX;
-  const detailId = "detail-"+kind;
-  let html='<table><tr><td class="corner" rowspan="6" style="width:22px"><div class="ytitle">Severity ↑</div></td><td class="corner"></td>';
+  let html='<table><tr><td class="corner" rowspan="6" style="width:22px"><div class="ytitle">'+(isDx?'Severity ↑':'Potential harm ↑')+'</div></td><td class="corner"></td>';
   XS.forEach(x=>{ html+=`<td class="xhead">${x.n}. ${x.label}</td>`; });
   html+='</tr>';
   SEV.forEach(sv=>{
     html+=`<tr><td class="yhead">${sv.n}. ${sv.label}</td>`;
     XS.forEach(x=>{
-      const score = isDx ? sv.n*(6-x.n) : sv.n*x.n;
-      const z = zone(score);
-      const floor = sv.n>=4;
-      html+=`<td class="cell ${z.k}" data-kind="${kind}" data-s="${sv.n}" data-x="${x.n}" data-score="${score}"
-                onclick="pick(this)">
-               <div class="sc">${score}</div>
-               <div class="zn">${z.name}</div>
-               ${floor?'<div class="fl">⚑</div>':''}
-             </td>`;
+      const score = scoreOf(kind,sv.n,x.n);
+      const z = zone(score); const floor = sv.n>=4;
+      html+=`<td class="cell ${z.k}" data-kind="${kind}" data-s="${sv.n}" data-x="${x.n}" onclick="pick(this)"><div class="sc">${score}</div><div class="zn">${z.name}</div>${floor?'<div class="fl">⚑</div>':''}</td>`;
     });
     html+='</tr>';
   });
   html+='</table>';
   document.getElementById("grid-"+kind).innerHTML=html;
 }
-
 function pick(el){
-  const kind=el.dataset.kind, s=+el.dataset.s, x=+el.dataset.x, score=+el.dataset.score;
+  const kind=el.dataset.kind, s=+el.dataset.s, x=+el.dataset.x, score=scoreOf(kind,s,x);
   document.querySelectorAll('#grid-'+kind+' .cell').forEach(c=>c.classList.remove('sel'));
   el.classList.add('sel');
   const isDx = kind==="dx";
   const sv = SEV.find(v=>v.n===s);
   const xs = (isDx?DIFF:DEV).find(v=>v.n===x);
-  const z = zone(score);
-  const ex = (isDx?DX:TX)[s][x-1];
-  const floor = s>=4;
+  const z = zone(score); const floor = s>=4;
   const xAxisName = isDx? "Difficulty" : "Deviation";
+  const exs = (isDx?DX:TX)[s][x-1] || [];
   let h = `<h3>Score ${score} · <span class="badge ${z.k}">${z.name}</span></h3>`;
-  h += `<div class="kv"><span class="k">Severity (row)</span><span class="v">${sv.n}. ${sv.label} — ${sv.desc}</span></div>`;
+  h += `<div class="kv"><span class="k">${isDx?'Severity':'Potential harm'} (row)</span><span class="v">${sv.n}. ${sv.label} — ${sv.desc}</span></div>`;
   h += `<div class="kv"><span class="k">${xAxisName} (column)</span><span class="v">${xs.n}. ${xs.label} — ${xs.desc}</span></div>`;
-  h += `<div class="kv"><span class="k">Formula</span><span class="v">${isDx? s+" × (6−"+x+") ease = "+score : s+" × "+x+" = "+score}</span></div>`;
-  h += `<div class="ex"><span class="lbl">Worked example</span>${ex}</div>`;
+  h += `<div class="kv"><span class="k">Formula</span><span class="v">${isDx? s+" × (6−"+x+") = "+score : s+" × "+x+" = "+score}</span></div>`;
+  h += `<div class="exlist"><span class="lbl">Worked examples — click to expand</span>`;
+  exs.forEach(e=>{ h += `<div class="exitem"><div class="extitle" onclick="toggleEx(this)"><span class="arw">▸</span><span>${e.t}</span></div><div class="exdetail">${e.d}</div></div>`; });
+  h += `</div>`;
   h += `<div class="action"><b>Recommended action:</b> ${z.action}</div>`;
-  if(floor) h += `<div class="action"><span class="floor">⚑ Severity floor:</span> any Severe/Catastrophic outcome triggers a mandatory outcome review regardless of the culpability score — low culpability ≠ no learning.</div>`;
+  if(floor) h += `<div class="action"><span class="floor">⚑ Severity floor:</span> any Severe/Catastrophic case triggers a mandatory outcome review regardless of the culpability score.</div>`;
   document.getElementById("detail-"+kind).innerHTML=h;
 }
-
+function toggleEx(t){ t.parentElement.classList.toggle('open'); }
 function switchView(v){
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));
   document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id==='view-'+v));
 }
-
-/* concept + legend + named shortcuts */
 document.getElementById('conceptBox').innerHTML =
-  `<b>How to read these grids.</b> Both output a 1–25 culpability score using two axes, but the second axis flips meaning by domain. `+
+  `<b>How to read these grids.</b> Both output a 1–25 culpability score from two axes, but the second axis flips meaning by domain. `+
   `For <b>diagnosis</b>, harder is more forgivable — you can't fault a clinician for missing the genuinely occult — so score = severity × <i>ease</i> (ease = 6 − difficulty). `+
-  `For <b>treatment</b> (diagnosis already known), being further from correct is more culpable, so score = severity × <i>deviation</i>. `+
-  `The worst diagnostic failure is missing an <b>obvious lethal</b> condition; the worst treatment failure is a <b>contraindicated</b> choice causing <b>fatal</b> harm. `+
+  `For <b>treatment</b> (diagnosis already known) the grid grades a <i>chosen error</i>: score = <i>potential harm × deviation</i>, where every column is a real deviation — optimal care isn't scored because there is nothing to grade. `+
+  `The worst diagnostic failure is missing an <b>obvious lethal</b> condition; the worst treatment failure is a <b>contraindicated</b> choice with <b>fatal</b> potential. `+
   `A ⚑ marks cells where the outcome itself (Severe/Catastrophic) mandates review even when culpability is low.`;
-
 const zones=[["z-sentinel","Sentinel","20–25"],["z-serious","Serious","15–19"],["z-review","Review","9–14"],["z-minor","Minor","5–8"],["z-accept","Acceptable","1–4"]];
 document.getElementById('legend').innerHTML =
   '<h4>Score zones & recommended response</h4>'+
   zones.map(z=>`<div class="lg"><span class="sw ${z[0]}"></span><b>${z[1]}</b> &nbsp;<span style="color:var(--muted)">(${z[2]})</span> — ${zone(z[2].split('–')[0]*1).action}</div>`).join('');
-
 document.getElementById('named-dx').innerHTML =
-  '<h4>Anchor example</h4>'+
+  '<h4>Anchor examples</h4>'+
   '<span class="pill" onclick="jump(\'dx\',5,1)">Missed classic MI → 25 Sentinel</span>'+
-  '<span class="pill" onclick="jump(\'dx\',5,5)">Missed silent/occult MI → 5 Minor culpability</span>'+
+  '<span class="pill" onclick="jump(\'dx\',5,5)">Missed silent/occult MI → 5 Minor</span>'+
   '<span class="pill" onclick="jump(\'dx\',3,1)">Missed textbook appendicitis → 15 Serious</span>';
 document.getElementById('named-tx').innerHTML =
   '<h4>Your anchor cases</h4>'+
   '<span class="pill" onclick="jump(\'tx\',3,5)">★ Steroid in diabetic (hip pain) → 15 Serious</span>'+
   '<span class="pill" onclick="jump(\'tx\',3,2)">★ Losartan 50 for SBP 160s → 6 Minor</span>';
-
 function jump(kind,s,x){
   switchView(kind);
   const el=document.querySelector(`#grid-${kind} .cell[data-s="${s}"][data-x="${x}"]`);
   if(el){pick(el); el.scrollIntoView({behavior:'smooth',block:'center'});}
 }
-
 document.getElementById('foot').innerHTML =
-  'Frameworks referenced: NCC MERP Index (A–I), WHO harm classification, CTCAE (1–5), and the DEER / SaferDx diagnostic-error taxonomies for characterizing the error type. '+
-  'Scores express <i>culpability for quality review</i>, not legal liability. Calibrate anchors with your own department before use.';
-
+  'Frameworks referenced: NCC MERP Index (A–I), WHO harm classification, CTCAE (1–5), and the DEER / SaferDx diagnostic-error taxonomies. '+
+  'Scores express <i>culpability for quality review</i>, not legal liability. Calibrate anchors with your department before use.';
 buildGrid('dx'); buildGrid('tx');
 </script>
 </body>
