@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clinical Quality Grids — Diagnosis & Treatment</title>
+<style>
+  :root{
+    --bg:#0f1523; --panel:#161d2e; --panel2:#1d2740; --ink:#e8edf7; --muted:#9aa7c2;
+    --line:#2a3550; --accent:#5b9bff;
+    --z-accept:#1f7a4d; --z-minor:#8a7c1f; --z-review:#b5731f; --z-serious:#c23b3b; --z-sentinel:#7a1f6b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 22px 60px}
+  h1{font-size:24px;margin:0 0 4px}
+  .sub{color:var(--muted);margin:0 0 20px;font-size:14px}
+  .tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+  .tab{background:var(--panel);border:1px solid var(--line);color:var(--muted);padding:9px 16px;border-radius:9px;cursor:pointer;font-weight:600;font-size:14px}
+  .tab.active{background:var(--panel2);color:var(--ink);border-color:var(--accent)}
+  .view{display:none}
+  .view.active{display:block}
+  .layout{display:grid;grid-template-columns:1fr 340px;gap:22px;align-items:start}
+  @media(max-width:900px){.layout{grid-template-columns:1fr}}
+  .gridcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .axis-note{font-size:13px;color:var(--muted);margin:0 0 14px}
+  .axis-note b{color:var(--ink)}
+  table{border-collapse:separate;border-spacing:3px;width:100%}
+  .corner{font-size:11px;color:var(--muted);text-align:center;vertical-align:bottom;padding:4px}
+  .xhead{font-size:11px;color:var(--muted);text-align:center;padding:6px 3px;font-weight:600}
+  .yhead{font-size:11px;color:var(--muted);text-align:right;padding:3px 8px 3px 0;font-weight:600;white-space:nowrap}
+  .cell{border-radius:7px;cursor:pointer;padding:8px 4px;text-align:center;color:#fff;border:2px solid transparent;transition:transform .08s}
+  .cell:hover{transform:scale(1.06);border-color:#fff}
+  .cell.sel{border-color:#fff;box-shadow:0 0 0 2px var(--accent)}
+  .cell .sc{font-weight:800;font-size:16px}
+  .cell .zn{font-size:9px;opacity:.85;letter-spacing:.3px;text-transform:uppercase}
+  .cell .fl{font-size:10px;margin-top:1px}
+  .z-accept{background:var(--z-accept)} .z-minor{background:var(--z-minor)}
+  .z-review{background:var(--z-review)} .z-serious{background:var(--z-serious)} .z-sentinel{background:var(--z-sentinel)}
+  .xtitle{text-align:center;font-size:12px;color:var(--accent);font-weight:700;margin-top:10px;text-transform:uppercase;letter-spacing:.5px}
+  .ytitle{writing-mode:vertical-rl;transform:rotate(180deg);font-size:12px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+  .side{position:sticky;top:16px}
+  .detail{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:18px;min-height:220px}
+  .detail h3{margin:0 0 10px;font-size:16px}
+  .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#fff}
+  .kv{margin:10px 0;font-size:13px}
+  .kv .k{color:var(--muted);display:block;font-size:11px;text-transform:uppercase;letter-spacing:.4px}
+  .kv .v{color:var(--ink)}
+  .ex{margin-top:12px;padding:12px;background:var(--panel);border-radius:9px;font-size:13.5px;line-height:1.55;border-left:3px solid var(--accent)}
+  .ex .lbl{font-size:11px;text-transform:uppercase;color:var(--muted);letter-spacing:.4px;display:block;margin-bottom:4px}
+  .action{margin-top:12px;font-size:13px;color:var(--muted)}
+  .action b{color:var(--ink)}
+  .legend{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:16px;font-size:12.5px}
+  .legend h4{margin:0 0 10px;font-size:13px}
+  .lg{display:flex;align-items:center;gap:9px;margin:6px 0}
+  .sw{width:16px;height:16px;border-radius:4px;flex:none}
+  .named{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;font-size:13px}
+  .named h4{margin:0 0 8px;font-size:13px}
+  .named .pill{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:2px 8px;font-size:11px;color:var(--accent);cursor:pointer;margin:2px 4px 2px 0}
+  .floor{color:#ffd; font-weight:700}
+  .concept{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-bottom:20px;font-size:13.5px;line-height:1.6}
+  .concept b{color:var(--accent)}
+  .foot{color:var(--muted);font-size:12px;margin-top:26px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Clinical Quality Grids</h1>
+  <p class="sub">A two-axis culpability model for diagnostic and treatment decisions. Click any cell for its score, zone, and worked example.</p>
+
+  <div class="concept" id="conceptBox"></div>
+
+  <div class="tabs">
+    <div class="tab active" data-view="dx" onclick="switchView('dx')">🩺 Diagnosis Grid</div>
+    <div class="tab" data-view="tx" onclick="switchView('tx')">💊 Treatment Grid</div>
+  </div>
+
+  <!-- DIAGNOSIS -->
+  <div class="view active" id="view-dx">
+    <div class="layout">
+      <div>
+        <div class="gridcard">
+          <p class="axis-note"><b>Rows — Severity</b> (harm if the diagnosis is missed/delayed) &nbsp;·&nbsp; <b>Columns — Difficulty</b> (how hard the diagnosis is to make). Difficulty is <b>protective</b>: <i>score = severity × ease</i>, where ease = 6 − difficulty. Missing an <b>obvious, lethal</b> diagnosis is the worst quality failure.</p>
+          <div id="grid-dx"></div>
+          <div class="xtitle">Difficulty of Diagnosis →</div>
+        </div>
+      </div>
+      <div class="side">
+        <div class="detail" id="detail-dx"><h3>Select a cell</h3><p class="sub">Click a cell in the grid to see its scoring and a clinical example.</p></div>
+        <div class="named" id="named-dx"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TREATMENT -->
+  <div class="view" id="view-tx">
+    <div class="layout">
+      <div>
+        <div class="gridcard">
+          <p class="axis-note"><b>Rows — Severity</b> (harm caused by the treatment error) &nbsp;·&nbsp; <b>Columns — Deviation</b> (how far the chosen therapy is from correct). Deviation is <b>aggravating</b>: <i>score = severity × deviation</i>. A <b>contraindicated</b> drug causing <b>fatal</b> harm is the worst failure.</p>
+          <div id="grid-tx"></div>
+          <div class="xtitle">Deviation from Correct Treatment →</div>
+        </div>
+      </div>
+      <div class="side">
+        <div class="detail" id="detail-tx"><h3>Select a cell</h3><p class="sub">Click a cell in the grid to see its scoring and a clinical example.</p></div>
+        <div class="named" id="named-tx"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend" id="legend"></div>
+
+  <p class="foot" id="foot"></p>
+</div>
+
+<script>
+/* ---------- shared scales ---------- */
+const SEV = [
+  {n:5,label:"Catastrophic",desc:"Death or equivalent if missed/wrong (MERP I · CTCAE 5)"},
+  {n:4,label:"Severe",desc:"Permanent harm — organ/limb loss, disability (MERP G–H · CTCAE 4)"},
+  {n:3,label:"Moderate",desc:"Significant but recoverable morbidity / avoidable admission (MERP F · CTCAE 3)"},
+  {n:2,label:"Mild",desc:"Temporary, reversible harm or delayed benefit (MERP E · CTCAE 2)"},
+  {n:1,label:"Minimal",desc:"Negligible / self-limiting; little or no harm (MERP A–D · CTCAE 1)"}
+];
+const DIFF = [
+  {n:1,label:"Unmistakable",desc:"Textbook — any competent clinician should get it"},
+  {n:2,label:"Straightforward",desc:"Clear once basic workup is done"},
+  {n:3,label:"Moderate",desc:"Needs deliberate consideration/testing; some atypia"},
+  {n:4,label:"Difficult",desc:"Subtle/atypical/rare; careful clinicians can miss it"},
+  {n:5,label:"Occult",desc:"Genuinely hidden; most competent clinicians would miss it"}
+];
+const DEV = [
+  {n:1,label:"Optimal",desc:"Within accepted practice — effectively no error"},
+  {n:2,label:"Wrong magnitude",desc:"Right drug & direction, but under/over-dosed or not titrated"},
+  {n:3,label:"Inferior selection",desc:"Right goal, clearly inferior agent/class; ignores a comorbidity-tailored better choice"},
+  {n:4,label:"Ineffective",desc:"Does not address the diagnosis — no benefit"},
+  {n:5,label:"Contraindicated",desc:"Actively harmful / contraindicated — worsens the patient"}
+];
+
+/* ---------- zones ---------- */
+function zone(s){
+  if(s<=4)  return {k:"z-accept",  name:"Acceptable", action:"Expected practice variation. No action beyond routine documentation."};
+  if(s<=8)  return {k:"z-minor",   name:"Minor",      action:"Educational feedback / individual learning point."};
+  if(s<=14) return {k:"z-review",  name:"Review",     action:"Formal case review; identify contributing factors."};
+  if(s<=19) return {k:"z-serious", name:"Serious",    action:"Peer review + corrective action; present at M&M."};
+  return             {k:"z-sentinel",name:"Sentinel",   action:"Mandatory root-cause analysis; system-level response."};
+}
+
+/* ---------- diagnosis examples [severity 5..1][difficulty 1..5] ---------- */
+const DX = {
+ 5:[ "Classic ACS: crushing substernal pain, diaphoresis, radiation in a high-risk CAD patient — sent home without ECG/referral. The archetypal preventable death.",
+     "STEMI evident on an ECG already obtained for chest pain — findings not read or not acted on.",
+     "PE: pleuritic pain + tachycardia + recent immobilization — discoverable via Wells score, D-dimer/CTA if considered.",
+     "Aortic dissection presenting as atypical chest/back pain with a near-normal exam; or PE lacking classic risk factors.",
+     "Silent MI presenting only as fatigue/nausea in an elderly diabetic; or sentinel SAH as an atypical headache that resolved." ],
+ 4:[ "Testicular torsion: acute severe testicular pain in an adolescent; or cauda equina with saddle anesthesia + retention + bilateral leg weakness.",
+     "Acute stroke with unambiguous focal deficits (FAST-positive) within the treatment window.",
+     "Septic arthritis: hot, swollen joint + fever needing arthrocentesis — easily mis-attributed to gout.",
+     "Compartment syndrome with early pain-out-of-proportion; or early cauda equina with only vague symptoms.",
+     "Spinal epidural abscess: insidious back pain, no fever early, normal neuro exam — notoriously missed." ],
+ 3:[ "Classic appendicitis: RLQ pain, McBurney tenderness, rebound, anorexia, low-grade fever.",
+     "DVT: unilateral leg swelling + pain + a risk factor — Wells score then ultrasound.",
+     "Atypical (retrocecal) appendicitis; or pyelonephritis vs simple cystitis requiring deliberate assessment.",
+     "DVT masked by chronic baseline edema; or a smoldering diverticular abscess.",
+     "Occult moderate GI bleed presenting only as fatigue; early evolving process mimicking simple cellulitis." ],
+ 2:[ "Simple UTI: dysuria, frequency, positive urine dip.",
+     "Strep pharyngitis: Centor criteria + positive rapid antigen test.",
+     "Hypothyroidism behind nonspecific fatigue/weight gain — needs a TSH.",
+     "Subclinical hypothyroidism or mild iron-deficiency anemia with only vague symptoms.",
+     "Early celiac / other indolent condition with subtle, easily-overlooked features." ],
+ 1:[ "Viral URI — obvious and self-limiting.",
+     "Viral gastroenteritis with classic history.",
+     "Contact dermatitis vs another benign rash.",
+     "Atypical but benign rash or a mild functional complaint.",
+     "Obscure yet entirely benign, self-limiting finding." ]
+};
+
+/* ---------- treatment examples [severity 5..1][deviation 1..5] ---------- */
+const TX = {
+ 5:[ "STEMI managed on the correct reperfusion pathway (PCI/lytics) at proper dose — optimal.",
+     "Subtherapeutic heparin dosing in ACS/massive PE — right drug, dangerously low magnitude.",
+     "Oral antibiotics chosen where IV broad-spectrum coverage is required in septic shock.",
+     "Antibiotic with no coverage of the causative organism in sepsis; anaphylaxis treated with antihistamine alone (no epinephrine).",
+     "Non-selective beta-blocker in cocaine-associated ACS (unopposed alpha); AV-nodal blocker in WPW with AF — contraindicated, may precipitate arrest." ],
+ 4:[ "Guideline-dose anticoagulation for high-risk AF — optimal.",
+     "Chronically subtherapeutic anticoagulation in high CHA₂DS₂-VASc AF → embolic stroke over time.",
+     "Aspirin alone where full anticoagulation is indicated for stroke prevention in AF.",
+     "Topical/ineffective therapy for a condition needing systemic treatment, allowing permanent damage.",
+     "NSAID in advanced CKD → irreversible renal decline; stacking nephrotoxins." ],
+ 3:[ "Reasonable first-line agent at a proper dose for the condition — optimal.",
+     "★ Losartan 50 mg for a patient confirmed in the SBP 160s — right direction, insufficient magnitude; sustained elevation accrues cardiovascular/renal risk. A smaller miss.",
+     "Antihypertensive that ignores diabetic nephropathy (no ACEi/ARB despite albuminuria).",
+     "Wrong-spectrum antibiotic requiring re-treatment / admission; ineffective analgesic regimen for significant pain.",
+     "★ Systemic steroid for a diabetic's presumed arthritic hip pain — worsens glycemic control, risks hyperglycemic crisis. A big miss." ],
+ 2:[ "Well-matched minor therapy at the right dose — optimal.",
+     "Chronic medication left mildly under-dosed but corrected at the next visit — right direction, small magnitude gap.",
+     "A slightly inferior agent choice that is easily corrected at the next visit.",
+     "Ineffective symptomatic treatment causing only delayed relief.",
+     "Mildly inappropriate drug causing a minor, reversible side effect." ],
+ 1:[ "Trivial treatment matched correctly — optimal.",
+     "Negligible dose imprecision with no consequence.",
+     "Marginally non-preferred choice, no material difference.",
+     "Ineffective but harmless remedy (e.g., for a self-limiting complaint).",
+     "Inappropriate but inconsequential choice with no real risk." ]
+};
+
+/* ---------- builders ---------- */
+function buildGrid(kind){
+  const isDx = kind==="dx";
+  const XS = isDx?DIFF:DEV;
+  const data = isDx?DX:TX;
+  const detailId = "detail-"+kind;
+  let html='<table><tr><td class="corner" rowspan="6" style="width:22px"><div class="ytitle">Severity ↑</div></td><td class="corner"></td>';
+  XS.forEach(x=>{ html+=`<td class="xhead">${x.n}. ${x.label}</td>`; });
+  html+='</tr>';
+  SEV.forEach(sv=>{
+    html+=`<tr><td class="yhead">${sv.n}. ${sv.label}</td>`;
+    XS.forEach(x=>{
+      const score = isDx ? sv.n*(6-x.n) : sv.n*x.n;
+      const z = zone(score);
+      const floor = sv.n>=4;
+      html+=`<td class="cell ${z.k}" data-kind="${kind}" data-s="${sv.n}" data-x="${x.n}" data-score="${score}"
+                onclick="pick(this)">
+               <div class="sc">${score}</div>
+               <div class="zn">${z.name}</div>
+               ${floor?'<div class="fl">⚑</div>':''}
+             </td>`;
+    });
+    html+='</tr>';
+  });
+  html+='</table>';
+  document.getElementById("grid-"+kind).innerHTML=html;
+}
+
+function pick(el){
+  const kind=el.dataset.kind, s=+el.dataset.s, x=+el.dataset.x, score=+el.dataset.score;
+  document.querySelectorAll('#grid-'+kind+' .cell').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  const isDx = kind==="dx";
+  const sv = SEV.find(v=>v.n===s);
+  const xs = (isDx?DIFF:DEV).find(v=>v.n===x);
+  const z = zone(score);
+  const ex = (isDx?DX:TX)[s][x-1];
+  const floor = s>=4;
+  const xAxisName = isDx? "Difficulty" : "Deviation";
+  let h = `<h3>Score ${score} · <span class="badge ${z.k}">${z.name}</span></h3>`;
+  h += `<div class="kv"><span class="k">Severity (row)</span><span class="v">${sv.n}. ${sv.label} — ${sv.desc}</span></div>`;
+  h += `<div class="kv"><span class="k">${xAxisName} (column)</span><span class="v">${xs.n}. ${xs.label} — ${xs.desc}</span></div>`;
+  h += `<div class="kv"><span class="k">Formula</span><span class="v">${isDx? s+" × (6−"+x+") ease = "+score : s+" × "+x+" = "+score}</span></div>`;
+  h += `<div class="ex"><span class="lbl">Worked example</span>${ex}</div>`;
+  h += `<div class="action"><b>Recommended action:</b> ${z.action}</div>`;
+  if(floor) h += `<div class="action"><span class="floor">⚑ Severity floor:</span> any Severe/Catastrophic outcome triggers a mandatory outcome review regardless of the culpability score — low culpability ≠ no learning.</div>`;
+  document.getElementById("detail-"+kind).innerHTML=h;
+}
+
+function switchView(v){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));
+  document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id==='view-'+v));
+}
+
+/* concept + legend + named shortcuts */
+document.getElementById('conceptBox').innerHTML =
+  `<b>How to read these grids.</b> Both output a 1–25 culpability score using two axes, but the second axis flips meaning by domain. `+
+  `For <b>diagnosis</b>, harder is more forgivable — you can't fault a clinician for missing the genuinely occult — so score = severity × <i>ease</i> (ease = 6 − difficulty). `+
+  `For <b>treatment</b> (diagnosis already known), being further from correct is more culpable, so score = severity × <i>deviation</i>. `+
+  `The worst diagnostic failure is missing an <b>obvious lethal</b> condition; the worst treatment failure is a <b>contraindicated</b> choice causing <b>fatal</b> harm. `+
+  `A ⚑ marks cells where the outcome itself (Severe/Catastrophic) mandates review even when culpability is low.`;
+
+const zones=[["z-sentinel","Sentinel","20–25"],["z-serious","Serious","15–19"],["z-review","Review","9–14"],["z-minor","Minor","5–8"],["z-accept","Acceptable","1–4"]];
+document.getElementById('legend').innerHTML =
+  '<h4>Score zones & recommended response</h4>'+
+  zones.map(z=>`<div class="lg"><span class="sw ${z[0]}"></span><b>${z[1]}</b> &nbsp;<span style="color:var(--muted)">(${z[2]})</span> — ${zone(z[2].split('–')[0]*1).action}</div>`).join('');
+
+document.getElementById('named-dx').innerHTML =
+  '<h4>Anchor example</h4>'+
+  '<span class="pill" onclick="jump(\'dx\',5,1)">Missed classic MI → 25 Sentinel</span>'+
+  '<span class="pill" onclick="jump(\'dx\',5,5)">Missed silent/occult MI → 5 Minor culpability</span>'+
+  '<span class="pill" onclick="jump(\'dx\',3,1)">Missed textbook appendicitis → 15 Serious</span>';
+document.getElementById('named-tx').innerHTML =
+  '<h4>Your anchor cases</h4>'+
+  '<span class="pill" onclick="jump(\'tx\',3,5)">★ Steroid in diabetic (hip pain) → 15 Serious</span>'+
+  '<span class="pill" onclick="jump(\'tx\',3,2)">★ Losartan 50 for SBP 160s → 6 Minor</span>';
+
+function jump(kind,s,x){
+  switchView(kind);
+  const el=document.querySelector(`#grid-${kind} .cell[data-s="${s}"][data-x="${x}"]`);
+  if(el){pick(el); el.scrollIntoView({behavior:'smooth',block:'center'});}
+}
+
+document.getElementById('foot').innerHTML =
+  'Frameworks referenced: NCC MERP Index (A–I), WHO harm classification, CTCAE (1–5), and the DEER / SaferDx diagnostic-error taxonomies for characterizing the error type. '+
+  'Scores express <i>culpability for quality review</i>, not legal liability. Calibrate anchors with your own department before use.';
+
+buildGrid('dx'); buildGrid('tx');
+</script>
+</body>
+</html>
